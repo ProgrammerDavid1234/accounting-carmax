@@ -23,7 +23,7 @@ export default function CurrencyForm({ isUpdateForm = false }) {
         rules={[
           {
             required: true,
-            message: 'Please input your surname!',
+            message: 'Please input your symbol!',
           },
         ]}
         style={{
@@ -40,6 +40,7 @@ export default function CurrencyForm({ isUpdateForm = false }) {
         rules={[
           {
             required: true,
+            message: 'Please input a decimal separator!',
           },
         ]}
         style={{
@@ -57,6 +58,7 @@ export default function CurrencyForm({ isUpdateForm = false }) {
         rules={[
           {
             required: true,
+            message: 'Please input a thousand separator!',
           },
         ]}
         style={{
@@ -68,19 +70,14 @@ export default function CurrencyForm({ isUpdateForm = false }) {
         <Input />
       </Form.Item>
       <Form.Item
-        label="Is Default Currency"
+        label="Set as Default Currency"
         name="isDefault"
-        rules={[
-          {
-            required: true,
-          },
-        ]}
+        valuePropName="checked"
         style={{
           display: 'inline-block',
           width: 'calc(50%)',
           paddingLeft: '5px',
         }}
-        valuePropName="checked"
       >
         <Switch checkedChildren={<CheckOutlined />} unCheckedChildren={<CloseOutlined />} />
       </Form.Item>
