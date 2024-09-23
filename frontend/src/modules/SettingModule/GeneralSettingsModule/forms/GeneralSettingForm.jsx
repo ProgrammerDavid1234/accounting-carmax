@@ -1,7 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { Input, Form, Select, Switch } from 'antd';
 import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
-
 import languages from '@/locale/languages';
 import useLanguage from '@/locale/useLanguage';
 import { translateAction } from '@/redux/translate/actions';

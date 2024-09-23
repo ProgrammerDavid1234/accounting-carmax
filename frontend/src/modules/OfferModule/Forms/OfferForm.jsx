@@ -3,6 +3,7 @@ import dayjs from 'dayjs';
 import { Form, Input, InputNumber, Button, Select, Divider, Row, Col } from 'antd';
 
 import { PlusOutlined } from '@ant-design/icons';
+import SelectCurrency from '@/components/SelectCurrency';
 
 import { DatePicker } from 'antd';
 
@@ -18,7 +19,6 @@ import { selectFinanceSettings } from '@/redux/settings/selectors';
 import { useDate } from '@/settings';
 import { useSelector } from 'react-redux';
 import useLanguage from '@/locale/useLanguage';
-import SelectCurrency from '@/components/SelectCurrency';
 
 export default function OfferForm({ subTotal = 0, current = null }) {
   const { last_offer_number } = useSelector(selectFinanceSettings);
