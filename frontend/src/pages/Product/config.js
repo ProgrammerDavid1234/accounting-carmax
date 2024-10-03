@@ -19,7 +19,5 @@ export const fields = {
   description: {
     type: 'textarea',
   },
-  ref: {
-    type: 'string',
-  },
+
 };

@@ -15,8 +15,8 @@ export default function ExpenseCategory() {
 
   const Labels = {
     PANEL_TITLE: translate('Expense_Category'),
-    DATATABLE_TITLE: translate('Expense_Category_list'),
-    ADD_NEW_ENTITY: translate('add_new_Expense_Category'),
+    DATATABLE_TITLE: translate('Clearing'),
+    ADD_NEW_ENTITY: translate('add_clearing_Category'),
     ENTITY_NAME: translate('Expense_Category'),
   };
   const configPage = {

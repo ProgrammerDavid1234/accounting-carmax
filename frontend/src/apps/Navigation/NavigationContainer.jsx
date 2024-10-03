@@ -113,10 +113,11 @@ function Sidebar({ collapsible, isMobile = false }) {
       label: <Link to={'/expenses'}>{translate('expenses')}</Link>,
     },
     {
-      key: 'expensesCategory',
-      icon: <ReconciliationOutlined />,
-      label: <Link to={'/category/expenses'}>{translate('expenses_Category')}</Link>,
-    },
+        key: 'expensesCategory',
+        icon: <ReconciliationOutlined />,
+        label: <Link to={'/category/expenses'}>{translate('clearing')}</Link>,
+      },
+      
 
     {
       label: translate('Settings'),
@@ -199,7 +200,7 @@ function Sidebar({ collapsible, isMobile = false }) {
           cursor: 'pointer',
         }}
       >
-        <img src={logoIcon} alt="Logo" style={{ marginLeft: '-5px', height: '40px' }} />
+        <img src={logoIcon} alt="Logo" style={{ marginLeft: '-5px', height: '60px', width: '100%' }} />
 
         {!showLogoApp && (
         <h2>Carmax</h2>

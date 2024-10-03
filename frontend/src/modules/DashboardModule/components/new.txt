@@ -1,0 +1,6 @@
+name of the car
+shipment
+clearing
+fixing
+
+total price(product)

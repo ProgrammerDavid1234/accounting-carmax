@@ -3,8 +3,7 @@ import { Col, Progress, Spin } from 'antd';
 import useLanguage from '@/locale/useLanguage';
 
 const colours = {
-  draft: '#595959',
-  sent: '#1890ff',
+  sent: '#595959',
   pending: '#1890ff',
   unpaid: '#ffa940',
   overdue: '#ff4d4f',
@@ -18,16 +17,9 @@ const colours = {
 };
 
 const defaultStatistics = [
-  {
-    tag: 'draft',
-    value: 0,
-  },
+
   {
     tag: 'pending',
-    value: 0,
-  },
-  {
-    tag: 'sent',
     value: 0,
   },
   {
@@ -45,10 +37,7 @@ const defaultStatistics = [
 ];
 
 const defaultInvoiceStatistics = [
-  {
-    tag: 'draft',
-    value: 0,
-  },
+
   {
     tag: 'pending',
     value: 0,

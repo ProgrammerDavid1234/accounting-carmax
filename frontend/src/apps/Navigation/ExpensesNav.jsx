@@ -3,7 +3,6 @@ import { Link, useLocation } from 'react-router-dom';
 import { Button, Drawer, Layout, Menu } from 'antd';
 
 import { useAppContext } from '@/context/appContext';
-
 import useLanguage from '@/locale/useLanguage';
 import logoIcon from '@/style/images/logo-icon.svg';
 import logoText from '@/style/images/logo-text.svg';
@@ -12,19 +11,8 @@ import useResponsive from '@/hooks/useResponsive';
 
 import {
   SettingOutlined,
-  CustomerServiceOutlined,
-  ContainerOutlined,
-  FileSyncOutlined,
-  DashboardOutlined,
-  TagOutlined,
-  TagsOutlined,
-  UserOutlined,
-  CreditCardOutlined,
-  MenuOutlined,
-  FileOutlined,
-  ShopOutlined,
-  FilterOutlined,
   WalletOutlined,
+  MenuOutlined,
 } from '@ant-design/icons';
 
 const { Sider } = Layout;
@@ -54,19 +42,22 @@ function Sidebar({ collapsible, isMobile = false }) {
       label: <Link to={'/expenses'}>{translate('expense')}</Link>,
     },
     {
-      key: 'expensesCategory',
+      key: 'clearing', // Updated the key to 'clearing'
       icon: <SettingOutlined />,
-      label: <Link to={'/category/expenses'}>{translate('expenses_Category')}</Link>,
+      label: <Link to={'/category/clearing'}>{translate('clearing')}</Link>, // Changed the label to 'clearing'
     },
   ];
 
   useEffect(() => {
-    if (location)
+    if (location) {
       if (currentPath !== location.pathname) {
         if (location.pathname === '/') {
           setCurrentPath('dashboard');
-        } else setCurrentPath(location.pathname.slice(1));
+        } else {
+          setCurrentPath(location.pathname.slice(1));
+        }
       }
+    }
   }, [location, currentPath]);
 
   useEffect(() => {
@@ -80,6 +71,7 @@ function Sidebar({ collapsible, isMobile = false }) {
     }, 200);
     return () => clearTimeout(timer);
   }, [isNavMenuClose]);
+
   const onCollapse = () => {
     navMenu.collapse();
   };

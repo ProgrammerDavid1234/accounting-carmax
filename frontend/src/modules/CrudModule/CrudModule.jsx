@@ -1,5 +1,5 @@
 import { useLayoutEffect, useEffect, useState } from 'react';
-import { Row, Col, Button } from 'antd';
+import { Row, Col, Button, message } from 'antd'; 
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
 import CreateForm from '@/components/CreateForm';
@@ -10,12 +10,10 @@ import SearchItem from '@/components/SearchItem';
 import DataTable from '@/components/DataTable/DataTable';
 
 import { useDispatch, useSelector } from 'react-redux';
-
 import { selectCurrentItem } from '@/redux/crud/selectors';
 import useLanguage from '@/locale/useLanguage';
 import { crud } from '@/redux/crud/actions';
 import { useCrudContext } from '@/context/crud';
-
 import { CrudLayout } from '@/layout';
 
 function SidePanelTopContent({ config, formElements, withUpload }) {
@@ -23,7 +21,7 @@ function SidePanelTopContent({ config, formElements, withUpload }) {
   const { crudContextAction, state } = useCrudContext();
   const { deleteModalLabels } = config;
   const { modal, editBox } = crudContextAction;
-
+  
   const { isReadBoxOpen, isEditBoxOpen } = state;
   const { result: currentItem } = useSelector(selectCurrentItem);
   const dispatch = useDispatch();
@@ -31,53 +29,50 @@ function SidePanelTopContent({ config, formElements, withUpload }) {
   const [labels, setLabels] = useState('');
   useEffect(() => {
     if (currentItem) {
-      const currentlabels = deleteModalLabels.map((x) => currentItem[x]).join(' ');
-
-      setLabels(currentlabels);
+      const currentLabels = deleteModalLabels.map((x) => currentItem[x]).join(' ');
+      setLabels(currentLabels);
     }
   }, [currentItem]);
 
   const removeItem = () => {
-    dispatch(crud.currentAction({ actionType: 'delete', data: currentItem }));
-    modal.open();
+    if (currentItem) {
+      const confirmDelete = window.confirm(`Are you sure you want to delete ${labels}?`);
+      if (confirmDelete) {
+        dispatch(crud.currentAction({ actionType: 'delete', data: currentItem }));
+        message.success('Item deleted successfully!');
+        modal.close();
+      }
+    } else {
+      message.error('No item selected for deletion.');
+    }
   };
+
   const editItem = () => {
-    dispatch(crud.currentAction({ actionType: 'update', data: currentItem }));
-    editBox.open();
+    if (currentItem) {
+      dispatch(crud.currentAction({ actionType: 'update', data: currentItem }));
+      editBox.open();
+    } else {
+      message.error('No item selected for editing.');
+    }
   };
 
   const show = isReadBoxOpen || isEditBoxOpen ? { opacity: 1 } : { opacity: 0 };
+
   return (
     <>
-      <Row style={show} gutter={(24, 24)}>
+      <Row style={show} gutter={[24, 24]}>
         <Col span={10}>
           <p style={{ marginBottom: '10px' }}>{labels}</p>
         </Col>
         <Col span={14}>
-          <Button
-            onClick={removeItem}
-            type="text"
-            icon={<DeleteOutlined />}
-            size="small"
-            style={{ float: 'right', marginLeft: '5px', marginTop: '10px' }}
-          >
+          <Button onClick={removeItem} type="text" icon={<DeleteOutlined />} size="small" style={{ float: 'right', marginLeft: '5px', marginTop: '10px' }}>
             {translate('remove')}
           </Button>
-          <Button
-            onClick={editItem}
-            type="text"
-            icon={<EditOutlined />}
-            size="small"
-            style={{ float: 'right', marginLeft: '0px', marginTop: '10px' }}
-          >
+          <Button onClick={editItem} type="text" icon={<EditOutlined />} size="small" style={{ float: 'right', marginTop: '10px' }}>
             {translate('edit')}
           </Button>
         </Col>
-
-        <Col span={24}>
-          <div className="line"></div>
-        </Col>
-        <div className="space10"></div>
+        <Col span={24}><div className="line"></div></Col>
       </Row>
       <ReadItem config={config} />
       <UpdateForm config={config} formElements={formElements} withUpload={withUpload} />
@@ -87,7 +82,6 @@ function SidePanelTopContent({ config, formElements, withUpload }) {
 
 function FixHeaderPanel({ config }) {
   const { crudContextAction } = useCrudContext();
-
   const { collapsedBox } = crudContextAction;
 
   const addNewItem = () => {
@@ -100,7 +94,7 @@ function FixHeaderPanel({ config }) {
         <SearchItem config={config} />
       </Col>
       <Col className="gutter-row" span={3}>
-        <Button onClick={addNewItem} block={true} icon={<PlusOutlined />}></Button>
+        <Button onClick={addNewItem} block icon={<PlusOutlined />}></Button>
       </Col>
     </Row>
   );
@@ -111,18 +105,14 @@ function CrudModule({ config, createForm, updateForm, withUpload = false }) {
 
   useLayoutEffect(() => {
     dispatch(crud.resetState());
-  }, []);
+  }, [dispatch]);
 
   return (
     <CrudLayout
       config={config}
       fixHeaderPanel={<FixHeaderPanel config={config} />}
-      sidePanelBottomContent={
-        <CreateForm config={config} formElements={createForm} withUpload={withUpload} />
-      }
-      sidePanelTopContent={
-        <SidePanelTopContent config={config} formElements={updateForm} withUpload={withUpload} />
-      }
+      sidePanelBottomContent={<CreateForm config={config} formElements={createForm} withUpload={withUpload} />}
+      sidePanelTopContent={<SidePanelTopContent config={config} formElements={updateForm} withUpload={withUpload} />}
     >
       <DataTable config={config} />
       <DeleteModal config={config} />
