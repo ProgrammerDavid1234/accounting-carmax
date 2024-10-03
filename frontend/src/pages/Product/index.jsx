@@ -40,7 +40,7 @@ export default function Product() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('/api/products'); // Adjust API endpoint as needed
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_SERVER}/api/products`);
         setProducts(response.data);
       } catch (error) {
         console.error('Error fetching products:', error);
