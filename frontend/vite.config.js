@@ -4,18 +4,17 @@ import react from '@vitejs/plugin-react';
 
 export default ({ mode }) => {
   // Load environment variables based on the mode
-  process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
+  const env = loadEnv(mode, process.cwd());
 
   // Define the proxy URL based on whether you're in development or production
   const proxy_url =
-    process.env.VITE_DEV_REMOTE === 'remote'
-      ? process.env.VITE_BACKEND_SERVER
+    env.VITE_DEV_REMOTE === 'remote'
+      ? env.VITE_BACKEND_SERVER
       : 'http://localhost:8888/';
 
   const config = {
     plugins: [react()],
     resolve: {
-      base: '/',
       alias: {
         '@': path.resolve(__dirname, 'src'),
       },
@@ -32,11 +31,18 @@ export default ({ mode }) => {
           },
         },
       }),
+      // Configure HMR for WebSocket connections
+      hmr: {
+        host: env.VITE_DEV_REMOTE === 'remote' ? 'accounting-carmax-frontend.onrender.com' : 'localhost',
+        port: 3000, // or the port you are using
+      },
     },
   };
-  
+
   // Set the backend URL for production
-  process.env.VITE_BACKEND_SERVER = 'https://accounting-carmax-backend.onrender.com';
-  
+  if (mode === 'production') {
+    process.env.VITE_BACKEND_SERVER = 'https://accounting-carmax-backend.onrender.com';
+  }
+
   return defineConfig(config);
 };
