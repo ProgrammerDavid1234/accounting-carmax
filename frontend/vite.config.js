@@ -1,11 +1,12 @@
 import path from 'path';
-
 import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 
 export default ({ mode }) => {
+  // Load environment variables based on the mode
   process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
 
+  // Define the proxy URL based on whether you're in development or production
   const proxy_url =
     process.env.VITE_DEV_REMOTE === 'remote'
       ? process.env.VITE_BACKEND_SERVER
@@ -21,14 +22,21 @@ export default ({ mode }) => {
     },
     server: {
       port: 3000,
-      proxy: {
-        '/api': {
-          target: proxy_url,
-          changeOrigin: true,
-          secure: false,
+      // Proxy configuration only needed in development
+      ...(mode === 'production' ? {} : {
+        proxy: {
+          '/api': {
+            target: proxy_url,
+            changeOrigin: true,
+            secure: false,
+          },
         },
-      },
+      }),
     },
   };
+  
+  // Set the backend URL for production
+  process.env.VITE_BACKEND_SERVER = 'https://accounting-carmax-backend.onrender.com';
+  
   return defineConfig(config);
 };
