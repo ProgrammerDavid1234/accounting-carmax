@@ -10,7 +10,7 @@ export default ({ mode }) => {
   const proxy_url =
     env.VITE_DEV_REMOTE === 'remote'
       ? env.VITE_BACKEND_SERVER
-      : 'http://localhost:8888/';
+      : 'http://localhost:8888/'; // Change back to localhost for local development
 
   const config = {
     plugins: [react()],
@@ -34,7 +34,7 @@ export default ({ mode }) => {
       // Configure HMR for WebSocket connections
       hmr: {
         host: env.VITE_DEV_REMOTE === 'remote' ? 'accounting-carmax-frontend.onrender.com' : 'localhost',
-        port: 3000, // or the port you are using
+        port: 3000, // Keep this consistent with the server port
       },
     },
   };
