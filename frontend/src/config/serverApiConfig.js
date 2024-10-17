@@ -9,7 +9,7 @@ export const BASE_URL =
     : 'http://localhost:8888/';
 
 export const WEBSITE_URL = import.meta.env.PROD
-  ? 'http://cloud.idurarapp.com/'
+  ? 'https://accounting-carmax-frontend.vercel.app/'
   : 'http://localhost:3000/';
 
 export const DOWNLOAD_BASE_URL =
