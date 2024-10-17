@@ -1,7 +1,6 @@
 const express = require('express');
 const { catchErrors } = require('@/handlers/errorHandlers');
 const router = express.Router();
-
 const appControllers = require('@/controllers/appControllers');
 const { routesList } = require('@/models/utils');
 
@@ -16,7 +15,7 @@ const routerApp = (entity, controller) => {
   router.route(`/${entity}/filter`).get(catchErrors(controller['filter']));
   router.route(`/${entity}/summary`).get(catchErrors(controller['summary']));
 
-  if (entity === 'invoice' || entity === 'quote' || entity === 'offer' || entity === 'payment') {
+  if (['invoice', 'quote', 'offer', 'payment'].includes(entity)) {
     router.route(`/${entity}/mail`).post(catchErrors(controller['mail']));
   }
 
