@@ -17,6 +17,8 @@ import { generate as uniqueId } from 'shortid';
 import { useNavigate } from 'react-router-dom';
 import { DOWNLOAD_BASE_URL } from '@/config/serverApiConfig';
 
+
+
 function AddNewItem({ config }) {
   const navigate = useNavigate();
   const { ADD_NEW_ENTITY, entity } = config;
