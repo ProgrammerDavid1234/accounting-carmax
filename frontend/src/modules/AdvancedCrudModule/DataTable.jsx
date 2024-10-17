@@ -1,8 +1,6 @@
 import { useEffect } from 'react';
 import {
   EyeOutlined,
-  EditOutlined,
-  DeleteOutlined,
   FilePdfOutlined,
   RedoOutlined,
   PlusOutlined,
@@ -10,7 +8,6 @@ import {
 } from '@ant-design/icons';
 import { Dropdown, Table, Button } from 'antd';
 import { PageHeader } from '@ant-design/pro-layout';
-
 import { useSelector, useDispatch } from 'react-redux';
 import useLanguage from '@/locale/useLanguage';
 import { adavancedCrud } from '@/redux/adavancedCrud/actions';
@@ -18,7 +15,6 @@ import { selectListItems } from '@/redux/adavancedCrud/selectors';
 import { useAdavancedCrudContext } from '@/context/adavancedCrud';
 import { generate as uniqueId } from 'shortid';
 import { useNavigate } from 'react-router-dom';
-
 import { DOWNLOAD_BASE_URL } from '@/config/serverApiConfig';
 
 function AddNewItem({ config }) {
@@ -49,6 +45,7 @@ export default function DataTable({ config, extra = [] }) {
   const { adavancedCrudContextAction } = useAdavancedCrudContext();
   const { modal } = adavancedCrudContextAction;
 
+  // Updated items array to remove edit and delete options
   const items = [
     {
       label: translate('Show'),
@@ -56,51 +53,25 @@ export default function DataTable({ config, extra = [] }) {
       icon: <EyeOutlined />,
     },
     {
-      label: translate('Edit'),
-      key: 'edit',
-      icon: <EditOutlined />,
-    },
-    {
       label: translate('Download'),
       key: 'download',
       icon: <FilePdfOutlined />,
     },
     ...extra,
-    {
-      type: 'divider',
-    },
-
-    {
-      label: translate('Delete'),
-      key: 'delete',
-      icon: <DeleteOutlined />,
-    },
   ];
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleRead = (record) => {
     dispatch(adavancedCrud.currentItem({ data: record }));
     navigate(`/${entity}/read/${record._id}`);
   };
-  const handleEdit = (record) => {
-    const data = { ...record };
-    dispatch(adavancedCrud.currentAction({ actionType: 'update', data }));
-    navigate(`/${entity}/update/${record._id}`);
-  };
   const handleDownload = (record) => {
     window.open(`${DOWNLOAD_BASE_URL}${entity}/${entity}-${record._id}.pdf`, '_blank');
   };
 
-  const handleDelete = (record) => {
-    dispatch(adavancedCrud.currentAction({ actionType: 'delete', data: record }));
-    modal.open();
-  };
-
-  const handleRecordPayment = (record) => {
-    dispatch(adavancedCrud.currentItem({ data: record }));
-    navigate(`/invoice/pay/${record.invoice._id}`);
-  };
+  // Removed handleEdit and handleDelete functions
 
   dataTableColumns = [
     ...dataTableColumns,
@@ -117,17 +88,8 @@ export default function DataTable({ config, extra = [] }) {
                 case 'read':
                   handleRead(record);
                   break;
-                case 'edit':
-                  handleEdit(record);
-                  break;
                 case 'download':
                   handleDownload(record);
-                  break;
-                case 'delete':
-                  handleDelete(record);
-                  break;
-                case 'recordPayment':
-                  handleRecordPayment(record);
                   break;
                 default:
                   break;
@@ -144,8 +106,6 @@ export default function DataTable({ config, extra = [] }) {
       ),
     },
   ];
-
-  const dispatch = useDispatch();
 
   const handelDataTableLoad = (pagination) => {
     const options = { page: pagination.current || 1, items: pagination.pageSize || 10 };

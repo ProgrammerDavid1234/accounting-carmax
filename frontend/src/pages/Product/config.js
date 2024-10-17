@@ -11,13 +11,12 @@ export const fields = {
     entity: 'productcategory',
     required: true,
   },
-
   price: {
     type: 'currency',
     required: true,
+    currencySymbol: '₦', // Ensure Naira symbol is used for price input
   },
   description: {
     type: 'textarea',
   },
-
 };

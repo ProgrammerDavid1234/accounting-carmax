@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Divider } from 'antd';
-
 import { Button, Row, Col, Descriptions, Statistic, Tag } from 'antd';
 import { PageHeader } from '@ant-design/pro-layout';
 import {
@@ -8,7 +7,6 @@ import {
   FilePdfOutlined,
   CloseCircleOutlined,
   RetweetOutlined,
-  MailOutlined,
 } from '@ant-design/icons';
 
 import { useSelector, useDispatch } from 'react-redux';
@@ -16,12 +14,9 @@ import useLanguage from '@/locale/useLanguage';
 import { adavancedCrud } from '@/redux/adavancedCrud/actions';
 
 import { generate as uniqueId } from 'shortid';
-
 import { selectCurrentItem } from '@/redux/adavancedCrud/selectors';
-
 import { DOWNLOAD_BASE_URL } from '@/config/serverApiConfig';
-import { useMoney, useDate } from '@/settings';
-import useMail from '@/hooks/useMail';
+import { useMoney } from '@/settings';
 import { useNavigate } from 'react-router-dom';
 import { tagColor } from '@/utils/statusTagColor';
 
@@ -75,7 +70,6 @@ export default function ReadItem({ config, selectedItem }) {
   const navigate = useNavigate();
 
   const { moneyFormatter } = useMoney();
-  const { send, isLoading: mailInProgress } = useMail({ entity });
 
   const { result: currentResult } = useSelector(selectCurrentItem);
 
@@ -165,16 +159,6 @@ export default function ReadItem({ config, selectedItem }) {
             icon={<FilePdfOutlined />}
           >
             {translate('Download PDF')}
-          </Button>,
-          <Button
-            key={`${uniqueId()}`}
-            loading={mailInProgress}
-            onClick={() => {
-              send(currentAdavancedCrud._id);
-            }}
-            icon={<MailOutlined />}
-          >
-            {translate('Send by Email')}
           </Button>,
           <Button
             key={`${uniqueId()}`}

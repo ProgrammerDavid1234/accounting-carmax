@@ -1,27 +1,15 @@
 import { useState, useEffect } from 'react';
 import { Divider } from 'antd';
-
 import { Button, Row, Col, Descriptions, Statistic, Tag } from 'antd';
 import { PageHeader } from '@ant-design/pro-layout';
-import {
-  EditOutlined,
-  FilePdfOutlined,
-  CloseCircleOutlined,
-  RetweetOutlined,
-  MailOutlined,
-} from '@ant-design/icons';
-
+import { FilePdfOutlined, CloseCircleOutlined, RetweetOutlined } from '@ant-design/icons';
 import { useSelector, useDispatch } from 'react-redux';
 import useLanguage from '@/locale/useLanguage';
 import { erp } from '@/redux/erp/actions';
-
 import { generate as uniqueId } from 'shortid';
-
 import { selectCurrentItem } from '@/redux/erp/selectors';
-
 import { DOWNLOAD_BASE_URL } from '@/config/serverApiConfig';
-import { useMoney, useDate } from '@/settings';
-import useMail from '@/hooks/useMail';
+import { useMoney } from '@/settings';
 import { useNavigate } from 'react-router-dom';
 import { tagColor } from '@/utils/statusTagColor';
 
@@ -36,30 +24,17 @@ const Item = ({ item, currentErp }) => {
         <p>{item.description}</p>
       </Col>
       <Col className="gutter-row" span={4}>
-        <p
-          style={{
-            textAlign: 'right',
-          }}
-        >
+        <p style={{ textAlign: 'right' }}>
           {moneyFormatter({ amount: item.price, currency_code: currentErp.currency })}
         </p>
       </Col>
       <Col className="gutter-row" span={4}>
-        <p
-          style={{
-            textAlign: 'right',
-          }}
-        >
+        <p style={{ textAlign: 'right' }}>
           {item.quantity}
         </p>
       </Col>
       <Col className="gutter-row" span={5}>
-        <p
-          style={{
-            textAlign: 'right',
-            fontWeight: '700',
-          }}
-        >
+        <p style={{ textAlign: 'right', fontWeight: '700' }}>
           {moneyFormatter({ amount: item.total, currency_code: currentErp.currency })}
         </p>
       </Col>
@@ -75,7 +50,6 @@ export default function ReadItem({ config, selectedItem }) {
   const navigate = useNavigate();
 
   const { moneyFormatter } = useMoney();
-  const { send, isLoading: mailInProgress } = useMail({ entity });
 
   const { result: currentResult } = useSelector(selectCurrentItem);
 
@@ -166,16 +140,6 @@ export default function ReadItem({ config, selectedItem }) {
           </Button>,
           <Button
             key={`${uniqueId()}`}
-            loading={mailInProgress}
-            onClick={() => {
-              send(currentErp._id);
-            }}
-            icon={<MailOutlined />}
-          >
-            {translate('Send by Email')}
-          </Button>,
-          <Button
-            key={`${uniqueId()}`}
             onClick={() => {
               dispatch(erp.convert({ entity, id: currentErp._id }));
             }}
@@ -183,23 +147,6 @@ export default function ReadItem({ config, selectedItem }) {
             style={{ display: entity === 'quote' ? 'inline-block' : 'none' }}
           >
             {translate('Convert to Invoice')}
-          </Button>,
-
-          <Button
-            key={`${uniqueId()}`}
-            onClick={() => {
-              dispatch(
-                erp.currentAction({
-                  actionType: 'update',
-                  data: currentErp,
-                })
-              );
-              navigate(`/${entity.toLowerCase()}/update/${currentErp._id}`);
-            }}
-            type="primary"
-            icon={<EditOutlined />}
-          >
-            {translate('Edit')}
           </Button>,
         ]}
         style={{

@@ -1,8 +1,6 @@
 import { useEffect } from 'react';
 import {
   EyeOutlined,
-  EditOutlined,
-  DeleteOutlined,
   FilePdfOutlined,
   RedoOutlined,
   PlusOutlined,
@@ -60,50 +58,23 @@ export default function DataTable({ config, extra = [] }) {
       icon: <EyeOutlined />,
     },
     {
-      label: translate('Edit'),
-      key: 'edit',
-      icon: <EditOutlined />,
-    },
-    {
       label: translate('Download'),
       key: 'download',
       icon: <FilePdfOutlined />,
     },
     ...extra,
-    {
-      type: 'divider',
-    },
-
-    {
-      label: translate('Delete'),
-      key: 'delete',
-      icon: <DeleteOutlined />,
-    },
   ];
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleRead = (record) => {
     dispatch(erp.currentItem({ data: record }));
     navigate(`/${entity}/read/${record._id}`);
   };
-  const handleEdit = (record) => {
-    const data = { ...record };
-    dispatch(erp.currentAction({ actionType: 'update', data }));
-    navigate(`/${entity}/update/${record._id}`);
-  };
+  
   const handleDownload = (record) => {
     window.open(`${DOWNLOAD_BASE_URL}${entity}/${entity}-${record._id}.pdf`, '_blank');
-  };
-
-  const handleDelete = (record) => {
-    dispatch(erp.currentAction({ actionType: 'delete', data: record }));
-    modal.open();
-  };
-
-  const handleRecordPayment = (record) => {
-    dispatch(erp.currentItem({ data: record }));
-    navigate(`/invoice/pay/${record._id}`);
   };
 
   dataTableColumns = [
@@ -121,22 +92,12 @@ export default function DataTable({ config, extra = [] }) {
                 case 'read':
                   handleRead(record);
                   break;
-                case 'edit':
-                  handleEdit(record);
-                  break;
                 case 'download':
                   handleDownload(record);
-                  break;
-                case 'delete':
-                  handleDelete(record);
-                  break;
-                case 'recordPayment':
-                  handleRecordPayment(record);
                   break;
                 default:
                   break;
               }
-              // else if (key === '2')handleCloseTask
             },
           }}
           trigger={['click']}
@@ -149,8 +110,6 @@ export default function DataTable({ config, extra = [] }) {
       ),
     },
   ];
-
-  const dispatch = useDispatch();
 
   const handelDataTableLoad = (pagination) => {
     const options = { page: pagination.current || 1, items: pagination.pageSize || 10 };
@@ -173,7 +132,8 @@ export default function DataTable({ config, extra = [] }) {
     const options = { equal: value, filter: searchConfig?.entity };
     dispatch(erp.list({ entity, options }));
   };
-  const langDirection=useSelector(selectLangDirection)
+  
+  const langDirection = useSelector(selectLangDirection);
 
   return (
     <>
@@ -181,7 +141,7 @@ export default function DataTable({ config, extra = [] }) {
         title={DATATABLE_TITLE}
         ghost={true}
         onBack={() => window.history.back()}
-        backIcon={langDirection==="rtl"?<ArrowRightOutlined/>:<ArrowLeftOutlined />}
+        backIcon={langDirection === "rtl" ? <ArrowRightOutlined /> : <ArrowLeftOutlined />}
         extra={[
           <AutoCompleteAsync
             key={`${uniqueId()}`}
@@ -189,9 +149,6 @@ export default function DataTable({ config, extra = [] }) {
             displayLabels={['name']}
             searchFields={'name'}
             onChange={filterTable}
-            // redirectLabel={'Add New Client'}
-            // withRedirect
-            // urlToRedirect={'/customer'}
           />,
           <Button onClick={handelDataTableLoad} key={`${uniqueId()}`} icon={<RedoOutlined />}>
             {translate('Refresh')}
@@ -201,9 +158,9 @@ export default function DataTable({ config, extra = [] }) {
         ]}
         style={{
           padding: '20px 0px',
-          direction:langDirection
+          direction: langDirection,
         }}
-      ></PageHeader>
+      />
 
       <Table
         columns={dataTableColumns}

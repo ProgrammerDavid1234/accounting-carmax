@@ -337,10 +337,10 @@ function FormElement({ field, feedback, setFeedback }) {
         className="moneyInput"
         min={0}
         controls={false}
-        addonAfter={money.currency_position === 'after' ? money.currency_symbol : undefined}
-        addonBefore={money.currency_position === 'before' ? money.currency_symbol : undefined}
+        addonAfter={money.currency_position === 'after' ? '₦' : undefined}
+        addonBefore={money.currency_position === 'before' ? '₦' : undefined}
       />
-    ),
+    ),    
   };
 
   const filedType = {

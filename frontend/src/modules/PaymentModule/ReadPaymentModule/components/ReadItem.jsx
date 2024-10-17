@@ -103,33 +103,6 @@ export default function ReadItem({ config, selectedItem }) {
           >
             {translate('Download PDF')}
           </Button>,
-          <Button
-            key={`${uniqueId()}`}
-            loading={mailInProgress}
-            onClick={() => {
-              send(currentErp._id);
-            }}
-            icon={<MailOutlined />}
-          >
-            {translate('Send by email')}
-          </Button>,
-
-          <Button
-            key={`${uniqueId()}`}
-            onClick={() => {
-              dispatch(
-                erp.currentAction({
-                  actionType: 'update',
-                  data: currentErp,
-                })
-              );
-              navigate(`/${entity.toLowerCase()}/update/${currentErp._id}`);
-            }}
-            type="primary"
-            icon={<EditOutlined />}
-          >
-            {translate('Edit')}
-          </Button>,
         ]}
         style={{
           padding: '20px 0px',
@@ -233,3 +206,7 @@ export default function ReadItem({ config, selectedItem }) {
     </>
   );
 }
+
+
+
+
